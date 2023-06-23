@@ -1,0 +1,105 @@
+//create container from image
+docker run
+
+//listing of running containers
+docker ps --all
+//listing of all containers
+docker start -a
+
+
+//delete all containers from history
+docker system prune
+
+docker logs
+
+//creating image
+docker build .
+
+//to build and run after without image id
+
+docker build -t ranfa23/redis:latest .
+docker build -t ranfa23/nodeapp:latest .
+docker build -t ranfa23/nodeapp .
+docker build -t ranfa23/postapp .
+docker build -t ranfa23/client .
+docker build -t ranfa23/postapp:0.0.1 .
+docker build -t ranfa23/event-bus .
+command to create a new image using docker commit with this command:
+
+docker commit -c "CMD 'redis-server'" CONTAINERID
+
+port change:
+
+docker run -p <port from outside> <port in container>:<imageId>
+
+docker run -p 5004:5004 ranfa23/nodeapp
+
+docker push <dockerid>
+docker push ranfa23/postapp
+docker push ranfa23/client
+
+kubectl
+kubectl apply -f event-bus-depl.yaml
+
+create pod with config file
+kubectl apply -f posts.yaml
+kubectl apply -f posts-depl.yaml
+apply changes for all files
+kubectl apply -f .
+if object is exist kube will only see what was change in config file
+and apply the changes. not create new
+kubectl apply -f posts-depl.yaml
+
+kubectl get pods
+runn command in pod
+kubectl exec -it <podname> <command>
+
+kubectl logs <podname>
+kubectl delete pod <podname>
+kubectl delete pod posts
+
+
+kubectl get deployments
+kubectl delete deployments <name>
+
+
+//to get latest version of image
+kubectl apply -f posts.yaml
+and then
+kubectl rollout restart deployment <depl name>
+kubectl rollout restart deployment posts-depl
+kubectl rollout restart deployment event-bus-depl
+
+
+kubectl apply -f posts-srv.yaml
+
+kubectl get services
+
+steps:
+build image
+1. docker build -t ranfa23/
+push to hub
+2. docker push ranfa23/
+create deployment:
+3. kubectl apply -f <name>-depl.yaml  kubectl apply -f event-bus-depl.yaml
+create cluster ip
+4.add to existing config of deployment and do apply
+5. get new url:
+http://event-bus-srv:5002/api/event call to event bus
+
+http://posts-clusterip-srv:5001/api/event call to posts
+
+skaffold:
+to start skaffold
+skaffold dev
+
+delete all pods:
+skaffold delete
+
+secret
+
+kubectl create secret generic jwt-secret --from-literal=JWT_KEY=secret
+    
+kubectl get secrets
+for cath the errors
+kubectl describe <podename>

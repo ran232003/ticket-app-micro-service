@@ -1,0 +1,32 @@
+course project:
+npm init -y
+
+npm i typescript ts-node-dev express @types/express body-parser
+
+
+//ts config file
+tsc --init
+
+adding to package.json:
+"start": "ts-node-dev src/app.ts",
+
+
+connect to docker descktop:
+ranfa23
+Ran232003#
+
+create skaffold file
+
+//if there is error
+skaffold fix
+
+skaffold dev
+
+ingress setup:
+
+set up host:
+C:\Windows\System32\drivers\etc
+add here a host for pretending the address is real site
+127.0.0.1 tickets.com
+
+
