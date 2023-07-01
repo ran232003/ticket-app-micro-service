@@ -9,7 +9,7 @@ metadata:
   namespace: default
 spec:
   rules:
-    - host: tickets.com
+    - host: tickets.dev
       http:
         paths:
           - path: /api/user/currentuser

@@ -103,3 +103,10 @@ kubectl create secret generic jwt-secret --from-literal=JWT_KEY=secret
 kubectl get secrets
 for cath the errors
 kubectl describe <podename>
+
+host file
+C:\Windows\System32\drivers\etc
+
+CHROME error:
+type:
+thisisunsafe

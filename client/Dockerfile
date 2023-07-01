@@ -13,6 +13,6 @@ RUN npm install
 COPY . .
 # Step 3: Tell the image what to do when it starts as container
 
-CMD ["npm","run","dev"]
+CMD ["npm","start"]
 
 #19ab24557c544c63be16f83c7ee68759c428c8fc7a920d978dfc9bfc014b4d5d

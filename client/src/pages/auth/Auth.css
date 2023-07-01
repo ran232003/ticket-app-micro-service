@@ -1,0 +1,43 @@
+.mainAuth {
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.form {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+.inputs {
+  margin: 0 auto;
+  padding: 1rem;
+  max-width: 50rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 6px;
+  background: white;
+}
+.header {
+  text-align: center;
+}
+.error {
+  border: 2px solid #ff6565;
+}
+.error-message {
+  color: #ff6565;
+
+  padding: 0.5em 0.2em;
+  height: 1em;
+  position: absolute;
+  font-size: 0.8em;
+}
+.inp {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

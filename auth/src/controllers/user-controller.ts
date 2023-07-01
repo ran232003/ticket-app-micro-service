@@ -56,7 +56,8 @@ export const signup = async (req: any, res: any, next: any) => {
     req.session = {
       jwt: token,
     };
-    console.log("user", user, token);
+    console.log(req.session);
+
     return res.json({ status: "ok", user: returnUser, token: token });
   } catch (error) {
     console.log("in catch", error);
@@ -101,6 +102,7 @@ export const signin = async (req: any, res: any, next: any) => {
   req.session = {
     jwt: token,
   };
+  console.log(req.session);
   return res.json({
     status: "ok",
     user: user,
