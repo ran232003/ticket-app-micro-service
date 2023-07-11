@@ -111,5 +111,10 @@ CHROME error:
 type:
 thisisunsafe
 
-npm RanMicroServiceApp
+npm common:
+npm login
+npm add user
+npm run build
+npm publish
+npm ranmicroserviceapp
 Mike232003@

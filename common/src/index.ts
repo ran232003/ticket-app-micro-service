@@ -5,3 +5,4 @@ const color: Color = {
   red: 10,
 };
 console.log(color, "111");
+export default color;
