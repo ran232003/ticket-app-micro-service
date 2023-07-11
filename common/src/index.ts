@@ -2,7 +2,7 @@ interface Color {
   red: number;
 }
 const color: Color = {
-  red: 10,
+  red: 12,
 };
 console.log(color, "111");
 export default color;
