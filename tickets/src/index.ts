@@ -1,9 +1,9 @@
 import express from "express";
 import { json } from "body-parser";
-import { userRouter } from "./routes/user-route";
 import { MyError } from "./models/MyError";
 import cookieSession from "cookie-session";
 import mongoose from "mongoose";
+import { ticketRouter } from "./routes/ticket-routes";
 const app = express();
 //when we are using ingress ngnx
 app.set("trust proxy", true);
@@ -18,12 +18,13 @@ app.use(
     secure: process.env.NODE_ENV !== "test",
   })
 );
-const port = 4000;
-console.log("process.env.NODE_ENV", process.env.NODE_ENV);
-app.use("/api/user", userRouter);
-app.get("/api/user2", (req, res) => {
-  return res.json({ status: "ok old" });
+console.log(process.env.NODE_ENV, process.env.MONGO_URI, "asd");
+const port = 4001;
+app.use("/api/tickets/createTicket", (req, res, next) => {
+  console.log("test");
+  return res.json({ status: "ok" }).status(200);
 });
+app.use("/api/tickets", ticketRouter);
 app.use((req: any, res: any, next: any) => {
   console.log("error generic2");
   const e = new MyError("SOMTHING WENT WRONG", 500);

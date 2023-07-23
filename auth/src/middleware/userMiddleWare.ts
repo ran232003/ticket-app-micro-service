@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
-import { MyError } from "../models/MyError";
+import { MyError } from "@ranmicroserviceapp/common";
+//import { MyError } from "../models/MyError";
 import { Request } from "express";
 interface UserVerify {
   id: string;

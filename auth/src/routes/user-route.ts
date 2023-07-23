@@ -7,7 +7,8 @@ import {
 } from "../controllers/user-controller";
 const router = express.Router();
 import { check, body } from "express-validator";
-import { checkToken, checkUser } from "../middleware/userMiddleWare";
+//import { checkToken, checkUser } from "../middleware/userMiddleWare";
+import { checkToken, checkUser } from "@ranmicroserviceapp/common";
 router.get("/currentuser", checkToken, checkUser, getCurrentUser);
 router.post(
   "/signin",

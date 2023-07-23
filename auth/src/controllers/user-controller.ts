@@ -5,7 +5,8 @@ import { error } from "console";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { query, validationResult } from "express-validator";
-import { MyError } from "../models/MyError";
+//import { MyError } from "../models/MyError";
+import { MyError } from "@ranmicroserviceapp/common";
 export const getCurrentUser = async (req: any, res: any, next: any) => {
   // const userId = decoded["id"];
   console.log("get current", req.currentUser);
