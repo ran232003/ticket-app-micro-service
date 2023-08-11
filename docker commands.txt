@@ -116,6 +116,8 @@ thisisunsafe
 npm common:
 npm login
 npm add user
+
+npm version patch
 npm run build
 npm publish
 npm ranmicroserviceapp
