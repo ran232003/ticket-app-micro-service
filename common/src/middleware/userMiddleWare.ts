@@ -38,6 +38,7 @@ export const checkToken = async (req: Request, res: any, next: any) => {
       return next(myError);
     }
     // const userId = decoded["id"];
+    console.log("currentUser", decoded);
     req.currentUser = decoded;
     return next();
   } catch (error) {
