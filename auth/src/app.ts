@@ -46,7 +46,7 @@ const start = async () => {
     console.log("connected to MONGO1");
   } catch (error) {
     console.log(error);
-  }
+  } //
   app.listen(port, () => {
     console.log("hello there");
     console.log(`Example app listening on port ${port}`);

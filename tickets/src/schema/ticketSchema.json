@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "userId": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000000
+    }
+  },
+  "required": ["title", "price"]
+}

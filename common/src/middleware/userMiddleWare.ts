@@ -35,6 +35,7 @@ export const checkToken = async (req: Request, res: any, next: any) => {
     if (!decoded) {
       const myError = new MyError("Error token", 500);
       console.log("error token");
+      return next(myError);
     }
     // const userId = decoded["id"];
     req.currentUser = decoded;

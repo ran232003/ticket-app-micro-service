@@ -47,6 +47,7 @@ const start = async () => {
     if (!process.env.MONGO_URI) {
       throw new MyError("MONGO_URI error", 500);
     }
+    //
     await mongoose.connect(process.env.MONGO_URI);
     console.log("connected to MONGO12");
   } catch (error) {
@@ -55,7 +56,7 @@ const start = async () => {
   app.listen(port, () => {
     console.log("hello there");
     console.log(`Example app listening on port ${port}`);
-  });
+  }); //
 };
-console.log("changes123222");
+console.log("changes123");
 start();

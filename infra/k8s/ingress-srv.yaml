@@ -54,6 +54,27 @@ spec:
                 name: tickets-srv
                 port:
                   number: 4001
+          - path: /api/tickets/getTickets
+            pathType: Prefix
+            backend:
+              service:
+                name: tickets-srv
+                port:
+                  number: 4001
+          - path: /api/tickets/updateTicket
+            pathType: Prefix
+            backend:
+              service:
+                name: tickets-srv
+                port:
+                  number: 4001
+          - path: /api/tickets/getTicket/([^/]+)
+            pathType: Prefix
+            backend:
+              service:
+                name: tickets-srv
+                port:
+                  number: 4001
           - path: /*
             pathType: Prefix
             backend:

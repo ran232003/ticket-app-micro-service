@@ -20,17 +20,14 @@ app.use(
 );
 console.log(process.env.NODE_ENV, process.env.MONGO_URI, "asd");
 const port = 4001;
-app.use("/api/tickets/createTicket", (req, res, next) => {
-  console.log("test");
-  return res.json({ status: "ok" }).status(200);
-});
+
 app.use("/api/tickets", ticketRouter);
 app.use((req: any, res: any, next: any) => {
   console.log("error generic2");
   const e = new MyError("SOMTHING WENT WRONG", 500);
   //res.status(errorCode);
   //res.status(500).send("Something broke!");
-  next(e);
+  next(e); //
 });
 app.use((error: MyError, req: any, res: any, next: any) => {
   console.log("error controller22", error);
