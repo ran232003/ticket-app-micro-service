@@ -106,6 +106,9 @@ kubectl get secrets
 for cath the errors
 kubectl describe <podename>
 
+enter file system of pod
+kubectl exec -it tickets-depl-849454c4cd-m6fqm sh
+
 host file
 C:\Windows\System32\drivers\etc
 
@@ -122,3 +125,7 @@ npm run build
 npm publish
 npm ranmicroserviceapp
 Mike232003@
+
+
+for testing nats
+kubectl port-forward nats-depl-85db75cd67-mldv2 4222:4222

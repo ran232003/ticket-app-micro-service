@@ -56,7 +56,7 @@ const start = async () => {
   app.listen(port, () => {
     console.log("hello there");
     console.log(`Example app listening on port ${port}`);
-  }); //
+  });
 };
 console.log("changes123");
 start();

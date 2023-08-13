@@ -75,6 +75,13 @@ spec:
                 name: tickets-srv
                 port:
                   number: 4001
+          - path: /api/tickets/deleteTicket/([^/]+)
+            pathType: Prefix
+            backend:
+              service:
+                name: tickets-srv
+                port:
+                  number: 4001
           - path: /*
             pathType: Prefix
             backend:

@@ -24,7 +24,7 @@ const port = 4001;
 app.use("/api/tickets", ticketRouter);
 app.use((req: any, res: any, next: any) => {
   console.log("error generic2");
-  const e = new MyError("SOMTHING WENT WRONG", 500);
+  const e = new MyError("SOMTHING WENT WRONG", 500); //
   //res.status(errorCode);
   //res.status(500).send("Something broke!");
   next(e); //

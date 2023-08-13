@@ -9,7 +9,10 @@
       "type": "number",
       "minimum": 0,
       "maximum": 1000000
+    },
+    "ticketId": {
+      "type": "string"
     }
   },
-  "required": ["title", "price"]
+  "required": ["title", "price", "ticketId"]
 }
