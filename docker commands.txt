@@ -129,3 +129,11 @@ Mike232003@
 
 for testing nats
 kubectl port-forward nats-depl-85db75cd67-mldv2 4222:4222
+
+for monitoring nats:
+kubectl port-forward nats-depl-85db75cd67-mldv2 8222:8222
+
+open web: http://localhost:8222/streaming
+
+more info about the topics
+http://localhost:8222/streaming/channelsz?subs=1

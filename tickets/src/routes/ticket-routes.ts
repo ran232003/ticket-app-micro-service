@@ -17,7 +17,7 @@ import {
   checkSchemaUpdateTicket,
   testMiddle,
 } from "../middleWare";
-router.post("/test", testMiddle("myTest"), test);
+//router.post("/test", testMiddle("myTest"), test);
 router.post("/createTicket", checkToken, checkUser, checkSchema, createTicket);
 router.get("/getTickets", getTickets); //
 router.get("/getTicket/:ticketId", checkToken, checkUser, getTicketById);
