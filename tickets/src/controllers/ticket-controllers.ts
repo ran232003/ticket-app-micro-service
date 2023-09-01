@@ -1,5 +1,7 @@
 import { MyError } from "@ranmicroserviceapp/common";
 import Ticket from "../models/ticket-schema";
+import { TicketCreatedPublisher } from "../events/publisher/ticket-created-publisher";
+import { natsWrraper } from "../nats-wrapper";
 
 export const test = (req: any, res: any, next: any) => {
   console.log("here", req.body);
@@ -15,6 +17,12 @@ export const createTicket = async (req: any, res: any, next: any) => {
     });
     await ticket.save();
     ticket = ticket.transform();
+    await new TicketCreatedPublisher(natsWrraper.getClient()).publish({
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId,
+      id: ticket.id,
+    });
     res.status(201);
     console.log("response", ticket);
     return res.json({ status: "ok", createTicket: "createTicket", ticket });

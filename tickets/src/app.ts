@@ -38,7 +38,11 @@
 import mongoose from "mongoose";
 import { app } from "./index";
 import { MyError } from "@ranmicroserviceapp/common";
+import crypto from "crypto";
+import { natsWrraper } from "./nats-wrapper";
+
 const port = 4001;
+const id = crypto.randomBytes(4).toString("hex");
 
 const start = async () => {
   //we will put the clusterIp
@@ -49,6 +53,17 @@ const start = async () => {
     }
     //
     await mongoose.connect(process.env.MONGO_URI);
+    //ticketing=>  from infra nats config
+    //clientId=>random id
+    //clusterId=>the url we will connect to, so the service for nats in infra config:
+    //http://nats-srv:4222
+    console.log("before");
+    await natsWrraper.connect("ticketing", id, "http://nats-srv:4222");
+    console.log("after");
+    natsWrraper.getClient().on("close", () => {
+      console.log("NATS close!");
+      process.exit();
+    });
     console.log("connected to MONGO12");
   } catch (error) {
     console.log("in error", error);
