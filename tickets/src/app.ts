@@ -47,19 +47,37 @@ const id = crypto.randomBytes(4).toString("hex");
 const start = async () => {
   //we will put the clusterIp
   try {
-    console.log(process.env.JWT_KEY, process.env.MONGO_URI);
     if (!process.env.MONGO_URI) {
       throw new MyError("MONGO_URI error", 500);
     }
+    if (!process.env.CLUSTER_ID_NATS) {
+      throw new MyError("CLUSTER_ID_NATS error", 500);
+    }
+    if (!process.env.NATS_CLIENT_ID) {
+      throw new MyError("NATS_CLIENT_ID error", 500);
+    }
+    if (!process.env.NATS_URL) {
+      throw new MyError("NATS_URL", 500);
+    }
+    console.log(
+      "test:",
+      process.env.JWT_KEY,
+      process.env.MONGO_URI,
+      process.env.NATS_URL, //http://nats-srv:4222
+      process.env.CLUSTER_ID_NATS, //tickets
+      process.env.NATS_CLIENT_ID //pod name
+    );
     //
     await mongoose.connect(process.env.MONGO_URI);
     //ticketing=>  from infra nats config
     //clientId=>random id
     //clusterId=>the url we will connect to, so the service for nats in infra config:
     //http://nats-srv:4222
-    console.log("before");
-    await natsWrraper.connect("ticketing", id, "http://nats-srv:4222");
-    console.log("after");
+    await natsWrraper.connect(
+      process.env.CLUSTER_ID_NATS,
+      process.env.NATS_CLIENT_ID,
+      process.env.NATS_URL
+    );
     natsWrraper.getClient().on("close", () => {
       console.log("NATS close!");
       process.exit();

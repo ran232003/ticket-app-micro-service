@@ -2,6 +2,7 @@ import { MyError } from "@ranmicroserviceapp/common";
 import Ticket from "../models/ticket-schema";
 import { TicketCreatedPublisher } from "../events/publisher/ticket-created-publisher";
 import { natsWrraper } from "../nats-wrapper";
+import { TicketUpdatedPublisher } from "../events/publisher/ticket-updated-publisher";
 
 export const test = (req: any, res: any, next: any) => {
   console.log("here", req.body);
@@ -17,6 +18,8 @@ export const createTicket = async (req: any, res: any, next: any) => {
     });
     await ticket.save();
     ticket = ticket.transform();
+
+    //publish to nats
     await new TicketCreatedPublisher(natsWrraper.getClient()).publish({
       title: ticket.title,
       price: ticket.price,
@@ -57,6 +60,24 @@ export const updateTicket = async (req: any, res: any, next: any) => {
       { _id: req.body.ticketId },
       { $set: { price: price, title: title } }
     );
+    if (ticket.acknowledged === true && ticket.modifiedCount === 1) {
+      console.log(
+        req.currentUser,
+        price,
+        title,
+        req.body.ticketId,
+        "send update to nats"
+      );
+      let message = {
+        userId: req.currentUser.id,
+        id: req.body.ticketId,
+        price,
+        title,
+      };
+      await new TicketUpdatedPublisher(natsWrraper.getClient()).publish(
+        message
+      );
+    }
     res.status(200);
     return res.json({ status: "ok", ticket: ticket });
   } catch (error) {
