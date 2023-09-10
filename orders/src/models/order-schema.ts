@@ -9,23 +9,26 @@ import { Model } from "mongoose";
 //   password: string;
 //   phone?: string;
 // }
-interface ITicket {
-  title: string;
+interface IOrder {
+  status: string;
   userId: string;
-  price: number;
+  expireAt: Date;
+  ticket: TicketDoc;
 }
 
 // Put all user instance methods in this interface:
-interface ITicketMethods {
+interface IOrderMethods {
   transform(): any;
 }
-type TicketModel = Model<ITicket, {}, ITicketMethods>;
-let ticketSchema = new Schema({
-  title: { type: String, required: true },
+type OrderModel = Model<IOrder, {}, IOrderMethods>;
+let orderSchema = new Schema({
+  status: { type: String, required: true },
   userId: { type: String, required: true },
-  price: { type: Number, required: true },
+  expireAt: { type: mongoose.Schema.Types.Date },
+  ticket: { type: mongoose.Schema.Types.ObjectId, ref: "Ticket" },
+  //ref to the tickets
 });
-ticketSchema.method("transform", function () {
+orderSchema.method("transform", function () {
   var obj: any = this.toObject();
 
   //Rename fields
@@ -41,11 +44,11 @@ ticketSchema.method("transform", function () {
 // userSchema.statics.build = (attributes: userAttributes) => {
 //   return new User(attributes);
 // };
-const Ticket = model<ITicket, TicketModel>("Ticket", ticketSchema);
+const Order = model<IOrder, OrderModel>("Order", orderSchema);
 //const User = mongoose.model("User", userSchema);
 
 // export const buildUser = (attributes: userAttributes) => {
 //   return new User(attributes);
 // };
 
-export default Ticket;
+export default Order;
