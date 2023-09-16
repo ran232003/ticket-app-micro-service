@@ -1,0 +1,51 @@
+user1: 
+{
+    "status": "ok",
+    "user": {
+        "email": "mike@email2233.com",
+        "id": "65057d811e619129897703f7"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MDU3ZDgxMWU2MTkxMjk4OTc3MDNmNyIsImVtYWlsIjoibWlrZUBlbWFpbDIyMzMuY29tIiwiaWF0IjoxNjk0ODU4NjI1LCJleHAiOjE2OTQ5NDUwMjV9.bCZXKQydhaVAG6gx9h7viU08ANcWLvmRR1Mq_zwiiyY"
+}
+
+has ticket:
+
+{
+    "status": "ok",
+    "createTicket": "createTicket",
+    "ticket": {
+        "title": "ticket1",
+        "userId": "65057d811e619129897703f7",
+        "price": 99,
+        "id": "65057d930c384bcb685ecef7"
+    }
+}
+
+user2:
+{
+    "status": "ok",
+    "user": {
+        "email": "ran@gmail.com",
+        "id": "65057dff1e619129897703fa"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MDU3ZGZmMWU2MTkxMjk4OTc3MDNmYSIsImVtYWlsIjoicmFuQGdtYWlsLmNvbSIsImlhdCI6MTY5NDg1ODc1MSwiZXhwIjoxNjk0OTQ1MTUxfQ.ndMFQUEDYyM6-JtuOXZgtkVW34sawC7KC2lSo7j9o8o"
+}
+
+user2 has order on ticket from user1:
+
+{
+    "status": "ok",
+    "order": {
+        "status": "created",
+        "userId": "65057dff1e619129897703fa",
+        "expireAt": "2023-09-16T10:21:41.996Z",
+        "ticket": {
+            "_id": "65057d930c384bcb685ecef7",
+            "title": "ticket1",
+            "price": 99,
+            "__v": 0
+        },
+        "_id": "65057e31303437659522b4ba",
+        "__v": 0
+    }
+}

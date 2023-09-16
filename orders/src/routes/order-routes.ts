@@ -4,6 +4,7 @@ import {
   deleteOrderById,
   getOrderById,
   getOrders,
+  saveTicketToDb,
   test,
 } from "../controllers/order-controllers";
 import { checkToken, checkUser } from "@ranmicroserviceapp/common";
@@ -16,8 +17,10 @@ router.delete(
   checkToken,
   checkUser,
   deleteOrderById
-); //
+);
 router.post("/createOrder", checkToken, checkUser, createOrder); //
+router.post("/saveTicketToDb", saveTicketToDb); //
+
 router.get("/getOrderById/:orderId", checkToken, checkUser, getOrderById); //
 
 export { router as orderRouter };

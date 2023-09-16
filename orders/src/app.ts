@@ -38,9 +38,10 @@
 import mongoose from "mongoose";
 import { app } from "./index";
 // import { MyError } from "@ranmicroserviceapp/common";
-import { MyError } from "@ranmicroserviceapp/common";
+import { MyError, OrderStatus } from "@ranmicroserviceapp/common";
 import crypto from "crypto";
 import { natsWrraper } from "./nats-wrapper";
+import Order from "./models/order-schema";
 
 const port = 4002;
 const id = crypto.randomBytes(4).toString("hex");
@@ -73,13 +74,14 @@ const start = async () => {
     //ticketing=>  from infra nats config
     //clientId=>random id
     //clusterId=>the url we will connect to, so the service for nats in infra config:
-    //http://nats-srv:4222
+    //http://nats-srv:4222//
     await natsWrraper.connect(
       process.env.CLUSTER_ID_NATS,
-      process.env.NATS_CLIENT_ID,
+      process.env.NATS_CLIENT_ID, ////
       process.env.NATS_URL
     );
     natsWrraper.getClient().on("close", () => {
+      //
       console.log("NATS close!");
       process.exit();
     });
@@ -90,7 +92,22 @@ const start = async () => {
   app.listen(port, () => {
     console.log("hello there");
     console.log(`Example app listening on port ${port}`);
-  });
+  }); //
 };
-console.log("changes123"); //
+console.log("changes123");
 start();
+const checkDatabase = async () => {
+  console.log("interval");
+  const update = { status: OrderStatus.Cancelled };
+  try {
+    const currentTime = new Date();
+    const results = await Order.updateMany({
+      expireAt: { $lt: currentTime },
+      update,
+    });
+    console.log(results);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const interval = setInterval(checkDatabase, 60000);

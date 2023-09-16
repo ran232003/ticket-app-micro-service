@@ -1,5 +1,7 @@
+import { OrderStatus } from "@ranmicroserviceapp/common";
 import mongoose, { Schema, model } from "mongoose";
 import { Model } from "mongoose";
+import { TicketDoc } from "./ticket-schema";
 
 //interface that describe the properties for the schema
 //also some props that are not coming in the constructor
@@ -10,7 +12,8 @@ import { Model } from "mongoose";
 //   phone?: string;
 // }
 interface IOrder {
-  status: string;
+  //STATUS IS ENUM FROMM COMMON
+  status: OrderStatus;
   userId: string;
   expireAt: Date;
   ticket: TicketDoc;
@@ -22,7 +25,7 @@ interface IOrderMethods {
 }
 type OrderModel = Model<IOrder, {}, IOrderMethods>;
 let orderSchema = new Schema({
-  status: { type: String, required: true },
+  status: { type: String, enum: Object.values(OrderStatus), required: true },
   userId: { type: String, required: true },
   expireAt: { type: mongoose.Schema.Types.Date },
   ticket: { type: mongoose.Schema.Types.ObjectId, ref: "Ticket" },
