@@ -11,7 +11,13 @@ export class TicketCreatedListener extends Listen<TicketCreatedEvent> {
   subject: Subjects.TicketCreated = Subjects.TicketCreated;
   groupName = "order-service";
   async onMessage(
-    data: { id: string; title: string; price: number; userId: string },
+    data: {
+      id: string;
+      title: string;
+      price: number;
+      userId: string;
+      version: number;
+    },
     msg: Message
   ) {
     console.log(data, "TicketCreatedListener");
@@ -21,6 +27,7 @@ export class TicketCreatedListener extends Listen<TicketCreatedEvent> {
       price: data.price,
       title: data.title,
       _id: data.id,
+      version: data.version,
     });
     await ticket.save();
     msg.ack();

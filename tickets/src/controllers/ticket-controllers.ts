@@ -26,6 +26,7 @@ export const createTicket = async (req: any, res: any, next: any) => {
       price: ticket.price,
       userId: ticket.userId,
       id: ticket.id,
+      version: 1,
     });
     res.status(201);
     console.log("response", ticket);
@@ -96,6 +97,7 @@ export const updateTicket = async (req: any, res: any, next: any) => {
       id: req.body.ticketId,
       price,
       title,
+      version,
     };
     ticket = ticket.transform();
     await new TicketUpdatedPublisher(natsWrraper.getClient()).publish(message);

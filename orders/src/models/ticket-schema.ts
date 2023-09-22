@@ -15,12 +15,14 @@ interface ITicket {
   title: string;
   price: number;
   _id: String;
+  version: number;
 }
 
 export interface TicketDoc {
   title: string;
   price: number;
   _id: String;
+  version: number;
 }
 // Put all user instance methods in this interface:
 interface ITicketMethods {
@@ -31,7 +33,7 @@ type TicketModel = Model<ITicket, {}, ITicketMethods>;
 let ticketSchema = new Schema({
   title: { type: String, required: true },
   _id: { type: String, required: true },
-
+  version: { type: Number, required: true },
   price: { type: Number, required: true },
 });
 ticketSchema.method("transform", function () {

@@ -105,6 +105,7 @@ export const createOrder = async (
       status: OrderStatus.Created,
       expireAt: exp,
       ticket: ticket,
+      version: 1,
     });
     await order.save();
     //send message to NATS

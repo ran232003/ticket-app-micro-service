@@ -16,6 +16,7 @@ interface IOrder {
   status: OrderStatus;
   userId: string;
   expireAt: Date;
+  version: number;
   ticket: TicketDoc;
 }
 
@@ -27,6 +28,7 @@ type OrderModel = Model<IOrder, {}, IOrderMethods>;
 let orderSchema = new Schema({
   status: { type: String, enum: Object.values(OrderStatus), required: true },
   userId: { type: String, required: true },
+  version: { type: Number, required: true },
   expireAt: { type: mongoose.Schema.Types.Date },
   ticket: { type: mongoose.Schema.Types.ObjectId, ref: "Ticket" },
   //ref to the tickets
