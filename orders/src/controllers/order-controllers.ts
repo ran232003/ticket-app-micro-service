@@ -3,6 +3,9 @@ import Ajv from "ajv";
 import { MyError, OrderStatus, Subjects } from "@ranmicroserviceapp/common";
 import Ticket from "../models/ticket-schema";
 import Order from "../models/order-schema";
+import { OrderCreatedPublisher } from "../events/publisher/order-created-publisher";
+import { natsWrraper } from "../nats-wrapper";
+import { OrderCancelledPublisher } from "../events/publisher/order-cancelled-publisher";
 export const test = (req: Request, res: Response, next: NextFunction) => {
   console.log("here", req.body);
   return res.json({ status: "ok" });
@@ -93,23 +96,7 @@ export const createOrder = async (
       const err = new MyError("Ticket is Reserved", 400);
       return next(err);
     }
-    //ticket?.transform()
-    // const order = await Order.findOne({
-    //   ticket: ticket,
-    //   status: {
-    //     $in: [
-    //       OrderStatus.Created,
-    //       OrderStatus.AwaitingPayment,
-    //       OrderStatus.Complete,
-    //     ],
-    //   },
-    // });
-    // if (order) {
-    //   const err = new MyError("Ticket Is Reserved", 400);
-    //   next(err);
-    // }
 
-    //calculate expiration date for the order(15 min time)
     const exp = new Date();
     exp.setSeconds(exp.getSeconds() + 15 * 60);
     //create order and save to DB
@@ -121,6 +108,16 @@ export const createOrder = async (
     });
     await order.save();
     //send message to NATS
+    await new OrderCreatedPublisher(natsWrraper.getClient()).publish({
+      id: order._id.toString(),
+      userId: order.userId,
+      status: order.status,
+      expireAt: order.expireAt.toISOString(),
+      ticket: {
+        ticketId: order.ticket._id.toString(),
+        price: order.ticket.price,
+      },
+    });
     return res.json({ status: "ok", order });
   } catch (error) {
     console.log(error);
@@ -139,11 +136,21 @@ export const deleteOrderById = async (
   console.log("deleteOrderById", orderId);
   const update = { status: OrderStatus.Cancelled };
   try {
-    const response = await Order.updateOne(
-      { _id: orderId, userId: userId },
-      update
-    );
-    return res.json({ status: "ok", response });
+    const order = await Order.findOne({ _id: orderId, userId: userId });
+    if (!order) {
+      const err = new MyError("Internal Error", 500);
+      return next(err);
+    }
+    order.status = OrderStatus.Cancelled;
+    await order.save();
+    await new OrderCancelledPublisher(natsWrraper.getClient()).publish({
+      id: order._id.toString(),
+      userId: order.userId,
+      ticket: {
+        ticketId: order.ticket._id.toString(),
+      },
+    });
+    return res.json({ status: "ok", order });
   } catch (error) {
     console.log(error);
     const err = new MyError("Internal Error", 500);

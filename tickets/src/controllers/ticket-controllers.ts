@@ -15,6 +15,7 @@ export const createTicket = async (req: any, res: any, next: any) => {
       title: req.body.title,
       price: req.body.price,
       userId: req.currentUser.id,
+      version: 1,
     });
     await ticket.save();
     ticket = ticket.transform();
@@ -55,29 +56,49 @@ export const updateTicket = async (req: any, res: any, next: any) => {
   //   { $set: { "jobs.$": "amdocs next" } }
   // );
   try {
-    const { title, price } = req.body;
-    const ticket = await Ticket.updateOne(
-      { _id: req.body.ticketId },
-      { $set: { price: price, title: title } }
-    );
-    if (ticket.acknowledged === true && ticket.modifiedCount === 1) {
-      console.log(
-        req.currentUser,
-        price,
-        title,
-        req.body.ticketId,
-        "send update to nats"
-      );
-      let message = {
-        userId: req.currentUser.id,
-        id: req.body.ticketId,
-        price,
-        title,
-      };
-      await new TicketUpdatedPublisher(natsWrraper.getClient()).publish(
-        message
-      );
+    const { title, price, ticketId } = req.body;
+    let ticket = await Ticket.findById(ticketId);
+    if (!ticket) {
+      const err = new MyError("Ticket Not Exist", 500);
+      return next(err);
     }
+    let version = ticket.version + 1;
+    ticket.set({
+      title: title,
+      price: price,
+      version: version,
+    });
+    await ticket.save();
+    // const ticket = await Ticket.updateOne(
+    //   { _id: req.body.ticketId },
+    //   { $set: { price: price, title: title } }
+    // );
+    // if (ticket.acknowledged === true && ticket.modifiedCount === 1) {
+    //   console.log(
+    //     req.currentUser,
+    //     price,
+    //     title,
+    //     req.body.ticketId,
+    //     "send update to nats"
+    //   );
+    //   let message = {
+    //     userId: req.currentUser.id,
+    //     id: req.body.ticketId,
+    //     price,
+    //     title,
+    //   };
+    //   await new TicketUpdatedPublisher(natsWrraper.getClient()).publish(
+    //     message
+    //   );
+    // }
+    let message = {
+      userId: req.currentUser.id,
+      id: req.body.ticketId,
+      price,
+      title,
+    };
+    ticket = ticket.transform();
+    await new TicketUpdatedPublisher(natsWrraper.getClient()).publish(message);
     res.status(200);
     return res.json({ status: "ok", ticket: ticket });
   } catch (error) {

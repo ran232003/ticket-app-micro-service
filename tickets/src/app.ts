@@ -36,7 +36,7 @@
 //   res.status(errorCode).json({ status: "fail", message: error.msg });
 // });
 import mongoose from "mongoose";
-import { app } from "./index";
+import { app } from "./index"; //
 import { MyError } from "@ranmicroserviceapp/common";
 import crypto from "crypto";
 import { natsWrraper } from "./nats-wrapper";

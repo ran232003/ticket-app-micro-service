@@ -42,6 +42,8 @@ import { MyError, OrderStatus } from "@ranmicroserviceapp/common";
 import crypto from "crypto";
 import { natsWrraper } from "./nats-wrapper";
 import Order from "./models/order-schema";
+import { TicketCreatedListener } from "./events/listener/ticket-created-listener";
+import { TicketUpdateListener } from "./events/listener/ticket-updated-listener";
 
 const port = 4002;
 const id = crypto.randomBytes(4).toString("hex");
@@ -86,6 +88,8 @@ const start = async () => {
       process.exit();
     });
     console.log("connected to MONGO12");
+    new TicketCreatedListener(natsWrraper.getClient()).listen();
+    new TicketUpdateListener(natsWrraper.getClient()).listen();
   } catch (error) {
     console.log("in error", error);
   }
@@ -110,4 +114,4 @@ const checkDatabase = async () => {
     console.log(error);
   }
 };
-const interval = setInterval(checkDatabase, 60000);
+//const interval = setInterval(checkDatabase, 60000);
