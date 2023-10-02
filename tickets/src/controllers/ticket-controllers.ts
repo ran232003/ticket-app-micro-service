@@ -16,6 +16,7 @@ export const createTicket = async (req: any, res: any, next: any) => {
       price: req.body.price,
       userId: req.currentUser.id,
       version: 1,
+      orderId: "",
     });
     await ticket.save();
     ticket = ticket.transform();
@@ -30,7 +31,11 @@ export const createTicket = async (req: any, res: any, next: any) => {
     });
     res.status(201);
     console.log("response", ticket);
-    return res.json({ status: "ok", createTicket: "createTicket", ticket });
+    return res.json({
+      status: "ok",
+      createTicket: "createTicket",
+      ticket: ticket,
+    });
   } catch (error) {
     console.log(error);
     const err = new MyError("Internal Error", 500);
@@ -61,6 +66,10 @@ export const updateTicket = async (req: any, res: any, next: any) => {
     let ticket = await Ticket.findById(ticketId);
     if (!ticket) {
       const err = new MyError("Ticket Not Exist", 500);
+      return next(err);
+    }
+    if (ticket.orderId) {
+      const err = new MyError("Ticket Is Reserved", 500);
       return next(err);
     }
     let version = ticket.version + 1;
@@ -100,6 +109,7 @@ export const updateTicket = async (req: any, res: any, next: any) => {
       version,
     };
     ticket = ticket.transform();
+
     await new TicketUpdatedPublisher(natsWrraper.getClient()).publish(message);
     res.status(200);
     return res.json({ status: "ok", ticket: ticket });

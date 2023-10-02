@@ -39,7 +39,9 @@ import mongoose from "mongoose";
 import { app } from "./index"; //
 import { MyError } from "@ranmicroserviceapp/common";
 import crypto from "crypto";
-import { natsWrraper } from "./nats-wrapper";
+import { natsWrraper } from "./nats-wrapper"; //
+import { OrderCreatedListener } from "./events/listeners/order-created-listener";
+import { OrderCancelledListener } from "./events/listeners/order-cancelled-listeners";
 
 const port = 4001;
 const id = crypto.randomBytes(4).toString("hex");
@@ -83,6 +85,8 @@ const start = async () => {
       process.exit();
     });
     console.log("connected to MONGO12");
+    new OrderCreatedListener(natsWrraper.getClient()).listen();
+    new OrderCancelledListener(natsWrraper.getClient()).listen();
   } catch (error) {
     console.log("in error", error);
   }

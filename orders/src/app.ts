@@ -68,7 +68,7 @@ const start = async () => {
       process.env.JWT_KEY,
       process.env.MONGO_URI,
       process.env.NATS_URL, //http://nats-srv:4222
-      process.env.CLUSTER_ID_NATS, //tickets
+      process.env.CLUSTER_ID_NATS, //orders
       process.env.NATS_CLIENT_ID //pod name
     );
     //

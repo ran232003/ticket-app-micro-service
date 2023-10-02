@@ -14,6 +14,7 @@ interface ITicket {
   userId: string;
   price: number;
   version: number;
+  orderId: string;
 }
 
 // Put all user instance methods in this interface:
@@ -26,6 +27,7 @@ let ticketSchema = new Schema({
   userId: { type: String, required: true },
   price: { type: Number, required: true },
   version: { type: Number, required: true },
+  orderId: { type: String },
 });
 ticketSchema.method("transform", function () {
   var obj: any = this.toObject();

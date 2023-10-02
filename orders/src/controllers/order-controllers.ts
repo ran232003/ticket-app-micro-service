@@ -113,6 +113,7 @@ export const createOrder = async (
       id: order._id.toString(),
       userId: order.userId,
       status: order.status,
+      version: 1,
       expireAt: order.expireAt.toISOString(),
       ticket: {
         ticketId: order.ticket._id.toString(),
@@ -143,14 +144,18 @@ export const deleteOrderById = async (
       return next(err);
     }
     order.status = OrderStatus.Cancelled;
+    order.version = order.version + 1;
     await order.save();
+    console.log("before publish");
     await new OrderCancelledPublisher(natsWrraper.getClient()).publish({
       id: order._id.toString(),
       userId: order.userId,
+      version: order.version,
       ticket: {
         ticketId: order.ticket._id.toString(),
       },
     });
+    console.log("after publish");
     return res.json({ status: "ok", order });
   } catch (error) {
     console.log(error);

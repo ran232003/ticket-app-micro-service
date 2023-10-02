@@ -21,7 +21,7 @@ export class TicketUpdateListener extends Listen<TicketUpdatedEvent> {
     msg: Message
   ) {
     //with message we will return the ack
-    console.log(data, "TicketUpdateListener");
+    console.log(data, "TicketUpdateListener", "here");
     const ticket = await Ticket.findById(data.id);
     if (!ticket) {
       throw new Error("Ticket Not Found");
@@ -36,7 +36,7 @@ export class TicketUpdateListener extends Listen<TicketUpdatedEvent> {
       title: data.title,
       version: data.version,
     });
-
+    await ticket.save();
     msg.ack();
   }
 }
