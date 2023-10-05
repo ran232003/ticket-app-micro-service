@@ -24,6 +24,7 @@ docker build -t ranfa23/postapp .
 docker build -t ranfa23/client .
 docker build -t ranfa23/tickets .
 docker build -t ranfa23/orders .
+docker build -t ranfa23/expiration .
 docker build -t ranfa23/postapp:0.0.1 .
 docker build -t ranfa23/event-bus .
 command to create a new image using docker commit with this command:
@@ -41,6 +42,7 @@ docker push ranfa23/postapp
 docker push ranfa23/client
 docker push ranfa23/tickets
 docker push ranfa23/orders 
+docker push ranfa23/expiration
 
 kubectl
 kubectl apply -f event-bus-depl.yaml
