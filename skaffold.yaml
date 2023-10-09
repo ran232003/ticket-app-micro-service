@@ -1,17 +1,12 @@
 apiVersion: skaffold/v4beta2
 kind: Config
+manifests:
+  rawYaml:
+    - ./infra/k8s/*
 build:
   artifacts:
     - image: ranfa23/auth
       context: auth
-      sync:
-        manual:
-          - src: src/***/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile
-    - image: ranfa23/expiration
-      context: expiration
       sync:
         manual:
           - src: src/***/*.ts
@@ -44,8 +39,5 @@ build:
         dockerfile: Dockerfile
   local:
     push: false
-manifests:
-  rawYaml:
-    - infra/k8s/*
 deploy:
   kubectl: {}

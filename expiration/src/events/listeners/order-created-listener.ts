@@ -10,6 +10,7 @@ import { Message } from "node-nats-streaming";
 //   import Ticket from "../../models/ticket-schema";
 //   import { TicketUpdatedPublisher } from "../publisher/ticket-updated-publisher";
 import { natsWrraper } from "../../nats-wrapper";
+import { expirationQueue } from "../../queues/expiration-queue";
 
 //creating listener that listen to order created
 export class OrderCreatedListener extends Listen<OrderCreatedEvent> {
@@ -29,24 +30,31 @@ export class OrderCreatedListener extends Listen<OrderCreatedEvent> {
     },
     msg: Message
   ) {
-    console.log(data, "OrderCreatedListener- expiration service");
+    try {
+      console.log(data, "OrderCreatedListener- expiration service");
+      //await expirationQueue.add({ orderId: data.id });
+      console.log("after");
 
-    //   const ticketId = data.ticket.ticketId;
-    //   const ticket = await Ticket.findById(ticketId);
-    //   if (!ticket) {
-    //     throw new MyError("Ticket Not Found", 500);
-    //   }
-    //   ticket.orderId = data.id;
-    //   ticket.version = ticket.version + 1;
-    //   await ticket.save();
-    //   let message = {
-    //     userId: data.userId,
-    //     id: data.ticket.ticketId,
-    //     price: ticket.price,
-    //     title: ticket.title,
-    //     version: ticket.version,
-    //   };
-    //await new TicketUpdatedPublisher(natsWrraper.getClient()).publish(message);
-    msg.ack();
+      //   const ticketId = data.ticket.ticketId;
+      //   const ticket = await Ticket.findById(ticketId);
+      //   if (!ticket) {
+      //     throw new MyError("Ticket Not Found", 500);
+      //   }
+      //   ticket.orderId = data.id;
+      //   ticket.version = ticket.version + 1;
+      //   await ticket.save();
+      //   let message = {
+      //     userId: data.userId,
+      //     id: data.ticket.ticketId,
+      //     price: ticket.price,
+      //     title: ticket.title,
+      //     version: ticket.version,
+      //   };
+      //await new TicketUpdatedPublisher(natsWrraper.getClient()).publish(message);
+      msg.ack();
+    } catch (error) {
+      console.log(error);
+      msg.ack();
+    }
   }
 }

@@ -46,7 +46,7 @@ docker push ranfa23/expiration
 
 kubectl
 kubectl apply -f event-bus-depl.yaml
-
+kubectl apply -f ingress-srv.yaml
 create pod with config file
 kubectl apply -f posts.yaml
 kubectl apply -f posts-depl.yaml
@@ -141,3 +141,7 @@ open web: http://localhost:8222/streaming
 
 more info about the topics
 http://localhost:8222/streaming/channelsz?subs=1
+
+secret error:
+kubectl create secret generic jwt-secret --from-literal=JWT_KEY=randomkey
+

@@ -44,9 +44,10 @@ import { natsWrraper } from "./nats-wrapper";
 import Order from "./models/order-schema";
 import { TicketCreatedListener } from "./events/listener/ticket-created-listener";
 import { TicketUpdateListener } from "./events/listener/ticket-updated-listener";
+import Expiration from "./models/expiration-schema";
 
 const port = 4002;
-const id = crypto.randomBytes(4).toString("hex");
+const id = crypto.randomBytes(4).toString("hex"); //
 
 const start = async () => {
   //we will put the clusterIp
@@ -114,4 +115,24 @@ const checkDatabase = async () => {
     console.log(error);
   }
 };
+
+async function expireService() {
+  // Your code to be executed every minute goes here
+  console.log("This code runs every minute, expireService");
+  const expireArray = await Expiration.find();
+  const now = new Date();
+  if (!expireArray) {
+    return;
+  }
+  expireArray.map((exp) => {
+    if (exp.status === "New" && exp.expireAt < now) {
+      console.log("publish expire event", exp, now);
+      //publish expire event
+    } else {
+      console.log("not exp", exp, now);
+    }
+  });
+}
 //const interval = setInterval(checkDatabase, 60000);
+const interval = 60000; // 1 minute in milliseconds
+setInterval(expireService, interval);

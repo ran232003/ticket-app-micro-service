@@ -2,6 +2,7 @@ import express from "express";
 import {
   createOrder,
   deleteOrderById,
+  getAllExpire,
   getOrderById,
   getOrders,
   saveTicketToDb,
@@ -22,5 +23,6 @@ router.post("/createOrder", checkToken, checkUser, createOrder); //
 router.post("/saveTicketToDb", saveTicketToDb); //
 
 router.get("/getOrderById/:orderId", checkToken, checkUser, getOrderById); //
+router.get("/getAllExpire", getAllExpire);
 
 export { router as orderRouter };

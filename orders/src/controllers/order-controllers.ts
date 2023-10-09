@@ -6,9 +6,20 @@ import Order from "../models/order-schema";
 import { OrderCreatedPublisher } from "../events/publisher/order-created-publisher";
 import { natsWrraper } from "../nats-wrapper";
 import { OrderCancelledPublisher } from "../events/publisher/order-cancelled-publisher";
+import Expiration from "../models/expiration-schema";
 export const test = (req: Request, res: Response, next: NextFunction) => {
   console.log("here", req.body);
   return res.json({ status: "ok" });
+};
+export const getAllExpire = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log("getAllExpire");
+  const expire = await Expiration.find();
+
+  return res.json({ status: "ok", expire });
 };
 export const saveTicketToDb = async (
   req: Request,
@@ -98,7 +109,7 @@ export const createOrder = async (
     }
 
     const exp = new Date();
-    exp.setSeconds(exp.getSeconds() + 15 * 60);
+    exp.setSeconds(exp.getSeconds() + 1 * 60);
     //create order and save to DB
     const order = new Order({
       userId: req.currentUser?.id,
@@ -107,6 +118,12 @@ export const createOrder = async (
       ticket: ticket,
       version: 1,
     });
+    const expire = new Expiration({
+      status: "New",
+      orderId: order._id,
+      expireAt: exp,
+    });
+    await expire.save();
     await order.save();
     //send message to NATS
     await new OrderCreatedPublisher(natsWrraper.getClient()).publish({

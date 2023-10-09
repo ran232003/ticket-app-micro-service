@@ -1,4 +1,5 @@
 # https://kubernetes.io/docs/concepts/services-networking/ingress/
+#
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -8,6 +9,7 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
   namespace: default
 spec:
+  ingressClassName: nginx
   rules:
     - host: tickets.dev
       http:
@@ -69,28 +71,28 @@ spec:
                 port:
                   number: 4001
           - path: /api/tickets/getTicket/([^/]+)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: tickets-srv
                 port:
                   number: 4001
           - path: /api/tickets/deleteTicket/([^/]+)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: tickets-srv
                 port:
                   number: 4001
           - path: /api/orders/?(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: orders-srv
                 port:
                   number: 4002
           - path: /*
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: client-srv

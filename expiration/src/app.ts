@@ -61,7 +61,7 @@ const start = async () => {
 
       process.env.NATS_URL, //http://nats-srv:4222
       process.env.CLUSTER_ID_NATS, //tickets
-      process.env.NATS_CLIENT_ID, //pod name
+      process.env.NATS_CLIENT_ID, //pod name//
       process.env.REDIS_HOST
     );
     //
@@ -76,7 +76,7 @@ const start = async () => {
       process.env.NATS_URL
     );
     natsWrraper.getClient().on("close", () => {
-      console.log("NATS close!");
+      console.log("NATS close!"); //
       process.exit();
     });
     new OrderCreatedListener(natsWrraper.getClient()).listen();
