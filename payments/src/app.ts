@@ -41,17 +41,13 @@ import { app } from "./index";
 import { MyError, OrderStatus } from "@ranmicroserviceapp/common";
 import crypto from "crypto";
 import { natsWrraper } from "./nats-wrapper";
-import Order from "./models/order-schema";
-import { TicketCreatedListener } from "./events/listener/ticket-created-listener";
-import { TicketUpdateListener } from "./events/listener/ticket-updated-listener";
-import Expiration from "./models/expiration-schema";
-import { OrderCancelledPublisher } from "./events/publisher/order-cancelled-publisher";
+import { OrderCreatedListener } from "./events/listeners/order-created-listener";
 
-const port = 4002;
-const id = crypto.randomBytes(4).toString("hex"); //
+const port = 4003;
+const id = crypto.randomBytes(4).toString("hex");
 
 const start = async () => {
-  //we will put the clusterIp
+  //we will put the clusterIp/
   try {
     if (!process.env.MONGO_URI) {
       throw new MyError("MONGO_URI error", 500);
@@ -70,7 +66,7 @@ const start = async () => {
       process.env.JWT_KEY,
       process.env.MONGO_URI,
       process.env.NATS_URL, //http://nats-srv:4222
-      process.env.CLUSTER_ID_NATS, //orders
+      process.env.CLUSTER_ID_NATS, //payments
       process.env.NATS_CLIENT_ID //pod name
     );
     //
@@ -84,14 +80,14 @@ const start = async () => {
       process.env.NATS_CLIENT_ID, ////
       process.env.NATS_URL
     );
+    new OrderCreatedListener(natsWrraper.getClient()).listen();
+
     natsWrraper.getClient().on("close", () => {
       //
       console.log("NATS close!");
       process.exit();
     });
     console.log("connected to MONGO12");
-    new TicketCreatedListener(natsWrraper.getClient()).listen();
-    new TicketUpdateListener(natsWrraper.getClient()).listen();
   } catch (error) {
     console.log("in error", error);
   }
@@ -102,57 +98,5 @@ const start = async () => {
 };
 console.log("changes123");
 start();
-const checkDatabase = async () => {
-  console.log("interval");
-  const update = { status: OrderStatus.Cancelled };
-  try {
-    const currentTime = new Date();
-    const results = await Order.updateMany({
-      expireAt: { $lt: currentTime },
-      update,
-    });
-    console.log(results);
-  } catch (error) {
-    console.log(error);
-  }
-};
 
-async function expireService() {
-  // Your code to be executed every minute goes here
-
-  const expireArray = await Expiration.find();
-  const now = new Date();
-  if (!expireArray) {
-    return;
-  }
-  expireArray.map(async (exp) => {
-    if (exp.status === "New" && exp.expireAt < now) {
-      console.log("publish expire event, cancel order", exp, now);
-      //publish expire event
-      const order = await Order.findById(exp.orderId);
-      if (!order) {
-        throw new MyError("no order found", 500);
-      }
-      if (order.status !== OrderStatus.Complete) {
-        //cancelled order and publish
-        order.status = OrderStatus.Cancelled;
-        order.version = order.version + 1;
-        await order.save();
-        console.log("before publish");
-        await new OrderCancelledPublisher(natsWrraper.getClient()).publish({
-          id: order._id.toString(),
-          userId: order.userId,
-          version: order.version,
-          ticket: {
-            ticketId: order.ticket._id.toString(),
-          },
-        });
-      }
-      exp.status = "Expire";
-      await exp.save();
-    }
-  });
-}
 //const interval = setInterval(checkDatabase, 60000);
-const interval = 60000; // 1 minute in milliseconds
-setInterval(expireService, interval);

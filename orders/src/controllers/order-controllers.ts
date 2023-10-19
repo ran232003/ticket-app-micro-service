@@ -109,7 +109,7 @@ export const createOrder = async (
     }
 
     const exp = new Date();
-    exp.setSeconds(exp.getSeconds() + 1 * 60);
+    exp.setSeconds(exp.getSeconds() + 15 * 60);
     //create order and save to DB
     const order = new Order({
       userId: req.currentUser?.id,

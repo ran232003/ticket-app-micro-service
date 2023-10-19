@@ -24,6 +24,7 @@ docker build -t ranfa23/postapp .
 docker build -t ranfa23/client .
 docker build -t ranfa23/tickets .
 docker build -t ranfa23/orders .
+docker build -t ranfa23/payments .
 docker build -t ranfa23/expiration .
 docker build -t ranfa23/postapp:0.0.1 .
 docker build -t ranfa23/event-bus .
@@ -43,6 +44,8 @@ docker push ranfa23/client
 docker push ranfa23/tickets
 docker push ranfa23/orders 
 docker push ranfa23/expiration
+docker push ranfa23/payments
+
 
 kubectl
 kubectl apply -f event-bus-depl.yaml
@@ -145,3 +148,6 @@ http://localhost:8222/streaming/channelsz?subs=1
 secret error:
 kubectl create secret generic jwt-secret --from-literal=JWT_KEY=randomkey
 
+reload vs code:
+
+On PC you can do Ctrl + Shift + P (mac: Cmd + Shift + P) then type "Reload Window"/"Reload TypeScript Project"/"Reload JavaScript Project" which will do those things without the need of manually close/reopen its kinda handy.

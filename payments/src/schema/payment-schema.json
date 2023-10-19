@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "orderId": {
+      "type": "string"
+    },
+    "token": {
+      "type": "string"
+    }
+  },
+  "required": ["orderId", "token"]
+}
