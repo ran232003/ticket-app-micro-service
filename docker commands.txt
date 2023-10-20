@@ -151,3 +151,11 @@ kubectl create secret generic jwt-secret --from-literal=JWT_KEY=randomkey
 reload vs code:
 
 On PC you can do Ctrl + Shift + P (mac: Cmd + Shift + P) then type "Reload Window"/"Reload TypeScript Project"/"Reload JavaScript Project" which will do those things without the need of manually close/reopen its kinda handy.
+
+stripe sign:
+Ran232003@
+
+create secret for api key:
+kubectl create secret generic stripe-secret --from-literal STRIPE_KEY=sk_test_51O3GtWCPnrx9Ir46jD0MOw6nqbmQlSWM0dmw3pYfh4JV3CC5AyuxVkjqrlrxQIOVfWbFUxdPaGxVHjdXvl0AQEVJ00ltaIMuZL
+to make use in the pod:
+add to payments depl

@@ -35,7 +35,7 @@
 //   //res.status(500).send("Something broke!");
 //   res.status(errorCode).json({ status: "fail", message: error.msg });
 // });
-import mongoose from "mongoose";
+import mongoose from "mongoose"; //
 import { app } from "./index";
 // import { MyError } from "@ranmicroserviceapp/common";
 import { MyError, OrderStatus } from "@ranmicroserviceapp/common";
@@ -44,13 +44,13 @@ import { natsWrraper } from "./nats-wrapper";
 import { OrderCreatedListener } from "./events/listeners/order-created-listener";
 
 const port = 4003;
-const id = crypto.randomBytes(4).toString("hex");
+const id = crypto.randomBytes(4).toString("hex"); //
 
 const start = async () => {
   //we will put the clusterIp/
   try {
     if (!process.env.MONGO_URI) {
-      throw new MyError("MONGO_URI error", 500);
+      throw new MyError("MONGO_URI error", 500); //
     }
     if (!process.env.CLUSTER_ID_NATS) {
       throw new MyError("CLUSTER_ID_NATS error", 500);
