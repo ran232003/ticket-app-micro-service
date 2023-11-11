@@ -8,7 +8,7 @@ const app = express();
 //when we are using ingress ngnx
 app.set("trust proxy", true);
 
-app.use(json());
+app.use(json()); //
 //send coockie only if https request is coming
 //when running jest the request are http
 //so when env is test we will set up to http

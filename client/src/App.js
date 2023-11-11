@@ -11,7 +11,12 @@ import { authAction } from "./store/authSlice";
 import ProtectedRoutes from "./ProtectedRoutes";
 import Loading from "./components/Loading";
 import { loadingAction } from "./store/loadingSlice";
-///
+import CreateTicket from "./pages/createTicket/CreateTicket";
+import Ticket from "./components/Ticket";
+import Order from "./components/Order";
+import OrdersTable from "./components/OrdersTable";
+import Orders from "./Orders/Orders";
+//
 function App() {
   //const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -44,6 +49,10 @@ function App() {
         <Routes>
           <Route element={<ProtectedRoutes />}>
             <Route path="/landing" element={<LandingPage />} />
+            <Route path="/ticket/:id" element={<Ticket />} />
+            <Route path="/orders/" element={<Orders />} />
+            <Route path="/orders/:orderId" element={<Order />} />
+            <Route path="/createTicket" element={<CreateTicket />} />
           </Route>
           <Route path="/auth/:status" element={<Auth />} />
 
@@ -53,5 +62,5 @@ function App() {
     </div>
   );
 }
-
+//
 export default App;

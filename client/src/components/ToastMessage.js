@@ -6,7 +6,7 @@ import Toast from "react-bootstrap/Toast";
 
 function ToastMessage(props) {
   const [show, setShow] = useState(true);
-  const { errorMessage, cssMessage, nullErrorMessage } = props;
+  const { errorMessage, cssMessage, nullErrorMessage, color } = props;
   const close = () => {
     console.log("close");
     setShow(false);

@@ -39,7 +39,7 @@ export const check = (arg: any) => {
       const schema = require(`./schema/${arg}.json`);
 
       console.log("schema", schema);
-      console.log("Middleware argument 2222:", arg);
+      console.log("Middleware argument 2222:", arg, "req.body = ", req.body);
       const validate_schema = ajv.compile(schema);
       let vaildate = validate_schema(req.body);
       if (vaildate) {

@@ -1,60 +1,53 @@
+import "./CreateTicket.css";
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import "./Auth.css";
 import { Formik, Field } from "formik";
+import Button from "react-bootstrap/Button";
+
 import * as Yup from "yup";
-import Button from "react-bootstrap/esm/Button";
-import { login, signUp } from "../../apiCalls";
 import ToastMessage from "../../components/ToastMessage";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { authAction } from "../../store/authSlice";
-const Auth = (props) => {
+import { createTicketUrl } from "../../URLS";
+import { apiCall } from "../../apiCalls";
+const CreateTicket = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  let { status } = useParams();
   const [errorMessage, setErrorMessage] = useState({
     message: "",
     color: "",
   });
-  status = status.toUpperCase();
   const initialValues = {
-    email: "",
-    password: "",
+    title: "",
+    price: null,
   };
   const SignupSchema = Yup.object().shape({
-    email: Yup.string()
-      .email("Not Valid Email")
-      .max(100, "*Email must be less than 100 characters")
-      .required("*Email is required"),
-    password: Yup.string()
-      .min(6, "Password must be more then 6 characters")
-      .max(40, "Password can't be longer than 40 characters"),
+    title: Yup.string()
+
+      .max(50, "*Title must be less than 100 characters")
+      .required("*Title is required"),
+    price: Yup.number("*Price Must Be A Number")
+      .positive("*Price Must Be Greater Than Zero")
+      .required("*Price is reqiuerd"),
   });
   const handleFormSubmit = async (values, errors) => {
-    let data;
-    if (status === "LOGIN") {
-      data = await login(values);
-    } else {
-      data = await signUp(values);
-    }
+    const data = await apiCall("POST", createTicketUrl, values);
     if (data.status === "fail") {
-      setErrorMessage({ message: data.message, color: "danger" });
+      setErrorMessage(data.message);
     } else {
       //moving to next page
-      setErrorMessage({ message: data.message, color: "success" });
-      dispatch(authAction.setUser(data.user));
-      dispatch(authAction.setLogin());
-      navigate("/landing");
+
+      return navigate("/landing");
     }
   };
   const nullErrorMessage = () => {
     setErrorMessage({ message: "", color: "" });
   };
   return (
-    <div className="mainAuth">
+    <div className="createTicket">
+      <div className="ticketHeader">
+        <h1>Create A Ticket</h1>
+      </div>
       <div className="form">
         <Formik
           validationSchema={SignupSchema}
@@ -76,27 +69,22 @@ const Auth = (props) => {
               className="inputs"
               style={{ marginTop: "60px" }}
             >
-              <div className="header">
-                <h2>{status}</h2>
-              </div>
-
               <Form.Group
                 className="mx-auto inp"
                 controlId="exampleForm.ControlInput1"
               >
-                <Form.Label>Email address</Form.Label>
+                <Form.Label>Title</Form.Label>
                 <Form.Control
-                  type="email"
+                  type="text"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.email}
-                  name="email"
-                  error={!!touched.email && !!errors.email}
-                  placeholder="name@example.com"
-                  className={touched.email && errors.email ? "error" : null}
+                  value={values.title}
+                  name="title"
+                  error={!!touched.title && !!errors.title}
+                  className={touched.title && errors.title ? "error" : null}
                 />
-                {touched.email && errors.email ? (
-                  <div className="error-message">{errors.email}</div>
+                {touched.title && errors.title ? (
+                  <div className="error-message">{errors.title}</div>
                 ) : null}
               </Form.Group>
 
@@ -104,23 +92,25 @@ const Auth = (props) => {
                 className="mb-3 inp"
                 controlId="exampleForm.ControlInput1"
               >
-                <Form.Label>Password</Form.Label>
+                <Form.Label>Price</Form.Label>
                 <Form.Control
-                  name="password"
+                  name="price"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.password}
-                  className={
-                    touched.password && errors.password ? "error" : null
-                  }
-                  type="password"
-                  placeholder="Password"
+                  value={values.price}
+                  className={touched.price && errors.price ? "error" : null}
+                  type="number"
+                  placeholder="Price"
                 />
-                {touched.password && errors.password ? (
-                  <div className="error-message">{errors.password}</div>
+                {touched.price && errors.price ? (
+                  <div className="error-message">{errors.price}</div>
                 ) : null}
               </Form.Group>
-              <Button type="submit" onClick={handleSubmit}>
+              <Button
+                type="submit"
+                className="btnCreateTicket"
+                onClick={handleSubmit}
+              >
                 Submit
               </Button>
             </Form>
@@ -140,4 +130,4 @@ const Auth = (props) => {
   );
 };
 
-export default Auth;
+export default CreateTicket;

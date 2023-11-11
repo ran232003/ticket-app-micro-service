@@ -26,13 +26,19 @@ const NavigationBar = () => {
   console.log("isLoggin", isLoggin);
   return (
     <Navbar bg="light" expand="lg" className="navbar">
-      <Navbar.Brand as={Link} to="/" className="brand">
+      <Navbar.Brand as={Link} to="/landing" className="brand">
         Tickets
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         {isLoggin ? (
           <Nav className="me-auto">
+            <Nav.Link as={Link} className="navLink" to="/orders">
+              My Orders
+            </Nav.Link>
+            <Nav.Link className="navLink" as={Link} to="/createTicket">
+              Sell Tickets
+            </Nav.Link>
             <Nav.Link onClick={handleSignOut} className="navLink" as={Link}>
               SignOut
             </Nav.Link>

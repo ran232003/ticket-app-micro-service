@@ -67,10 +67,10 @@ export const signup = async (req: any, res: any, next: any) => {
   }
 };
 export const signin = async (req: any, res: any, next: any) => {
+  console.log("signin", req.body);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const myError = new MyError("FAILD VALIDATION", 400);
-    console.log("req.body");
     return next(myError);
     //return res.json({ status: "fail", res: errors });
   }

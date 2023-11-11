@@ -3,6 +3,8 @@ import { NextFunction, Request, Response } from "express";
 import Order from "../models/order-schema";
 import stripe from "../stripe";
 import Payment from "../models/payment-schema";
+import { PaymentCreatedEventPublisher } from "../events/publishers/payment-created-publisher";
+import { natsWrraper } from "../nats-wrapper";
 
 export const payOrder = async (
   req: Request,
@@ -34,10 +36,15 @@ export const payOrder = async (
     });
     const payment = new Payment({ orderId: order._id, stripeId: charge.id });
     await payment.save();
+    await new PaymentCreatedEventPublisher(natsWrraper.getClient()).publish({
+      orderId: order._id,
+      stripeId: charge.id,
+      id: payment._id.toString(),
+    });
     // order.set({
     //     status:OrderStatus.Complete
     // })
-    return res.json({ msg: "ok", charge, payment });
+    return res.json({ msg: "ok", payment });
   } catch (error) {
     console.log(error);
     const err = new MyError("Internal Server Error", 500);

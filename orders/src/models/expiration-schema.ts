@@ -28,7 +28,7 @@ let expirationSchema = new Schema({
   status: { type: String, enum: ["New", "Expire"], required: true },
   expireAt: { type: mongoose.Schema.Types.Date },
 });
-
+//
 //building in schema method
 
 // userSchema.statics.build = (attributes: userAttributes) => {

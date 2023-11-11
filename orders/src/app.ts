@@ -46,6 +46,7 @@ import { TicketCreatedListener } from "./events/listener/ticket-created-listener
 import { TicketUpdateListener } from "./events/listener/ticket-updated-listener";
 import Expiration from "./models/expiration-schema";
 import { OrderCancelledPublisher } from "./events/publisher/order-cancelled-publisher";
+import { PaymentCreatedListener } from "./events/listener/payment-created-listener";
 
 const port = 4002;
 const id = crypto.randomBytes(4).toString("hex"); //
@@ -92,6 +93,7 @@ const start = async () => {
     console.log("connected to MONGO12");
     new TicketCreatedListener(natsWrraper.getClient()).listen();
     new TicketUpdateListener(natsWrraper.getClient()).listen();
+    new PaymentCreatedListener(natsWrraper.getClient()).listen();
   } catch (error) {
     console.log("in error", error);
   }
@@ -140,7 +142,7 @@ async function expireService() {
         await order.save();
         console.log("before publish");
         await new OrderCancelledPublisher(natsWrraper.getClient()).publish({
-          id: order._id.toString(),
+          id: order._id.toString(), //
           userId: order.userId,
           version: order.version,
           ticket: {

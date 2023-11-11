@@ -31,3 +31,58 @@ button {
   margin-top: -50px;
   background-size: 100%;
 }
+.ticketListMain {
+  margin-left: 50px;
+}
+.ticketLisRow {
+  cursor: pointer;
+  color: blue;
+}
+.ticketLisRow:hover {
+  background-color: #98eecc;
+  transition: all 2s ease;
+  color: blue;
+}
+.ticketCard {
+  margin: 0 auto;
+  padding: 1rem;
+  max-width: 50rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 6px;
+  background: white;
+}
+.mainTicket {
+  display: flex;
+  align-items: center;
+  margin-top: 30px;
+  justify-content: center;
+  flex-direction: column;
+}
+.mainImageTicket {
+  display: flex;
+}
+.mainTicketData {
+  margin-left: 20px;
+}
+.data {
+  display: flex;
+  margin-top: 10px;
+  height: 100%;
+}
+.headline {
+  text-align: center;
+}
+.price {
+  display: flex;
+}
+.order-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Center vertically as well */
+}
+
+.order-content {
+  text-align: center;
+}

@@ -41,7 +41,7 @@ export const saveTicketToDb = async (
     next(err);
   }
 };
-export const getOrders = async (
+export const getOrdersByUser = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -54,6 +54,23 @@ export const getOrders = async (
       return order.transform();
     });
     return res.json({ status: "ok", orders: ordersAfter });
+  } catch (error) {
+    console.log(error);
+    const err = new MyError("Internal Error", 500);
+    next(err);
+  }
+};
+export const getOrders = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    let userId = req.currentUser?.id;
+    console.log("getOrders", req.currentUser?.id);
+    const orders = await Order.find({ userId: userId }).populate("ticket");
+
+    return res.json({ status: "ok", orders: orders });
   } catch (error) {
     console.log(error);
     const err = new MyError("Internal Error", 500);
@@ -102,7 +119,26 @@ export const createOrder = async (
       const err = new MyError("Ticket Not Found", 401);
       return next(err);
     }
-    const isReserved = await ticket.isReserved();
+    const test = await Order.find({ userId: req.currentUser?.id })
+      .populate("ticket")
+      .exec();
+    const isReserved = test.find((dbOrder) => {
+      return dbOrder.ticket._id === ticket._id;
+    });
+    console.log("check", isReserved);
+    // const isReserved = await Order.findOne({
+    //   $and: [
+    //     { "ticket._id": ticket._id },
+    //     {
+    //       $or: [
+    //         { status: OrderStatus.Complete },
+    //         { status: OrderStatus.AwaitingPayment },
+    //         { status: OrderStatus.Complete },
+    //       ],
+    //     },
+    //   ],
+    // });
+    // console.log(isReserved, "is reserved");
     if (isReserved) {
       const err = new MyError("Ticket is Reserved", 400);
       return next(err);
@@ -137,7 +173,11 @@ export const createOrder = async (
         price: order.ticket.price,
       },
     });
-    return res.json({ status: "ok", order });
+    const orders = await Order.find({ userId: order.userId }).populate(
+      "ticket"
+    );
+
+    return res.json({ status: "ok", order, orders });
   } catch (error) {
     console.log(error);
     const err = new MyError("Internal Error", 500);

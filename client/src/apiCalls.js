@@ -91,6 +91,7 @@ export const apiCall = async (method, url, payload) => {
         console.log(`Sorry, we are out of.`);
     }
     data = await response.json();
+    console.log(`data return`, data);
     return data;
   } catch (error) {}
 };

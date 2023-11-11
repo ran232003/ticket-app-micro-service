@@ -1,0 +1,31 @@
+.createTicket {
+  display: flex;
+  flex-direction: column;
+}
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.ticketHeader {
+  display: flex;
+  justify-content: center;
+}
+.btnCreateTicket {
+  margin-top: 20px;
+}
+.error {
+  border: 2px solid #ff6565;
+}
+.error-message {
+  color: #ff6565;
+
+  padding: 0.5em 0.2em;
+  height: 1em;
+  position: absolute;
+  font-size: 0.8em;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

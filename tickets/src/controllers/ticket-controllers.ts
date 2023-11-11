@@ -45,7 +45,11 @@ export const createTicket = async (req: any, res: any, next: any) => {
 export const getTickets = async (req: any, res: any, next: any) => {
   console.log("getTickets");
   try {
-    let tickets = await Ticket.find({}); //
+    let tickets = await Ticket.find({
+      orderId: {
+        $eq: "",
+      },
+    }); //
     res.status(200);
     console.log("response", tickets);
     return res.json({ status: "ok", tickets });
